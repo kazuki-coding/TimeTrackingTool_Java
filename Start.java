@@ -14,14 +14,14 @@ public class Start {
     private String hms;
     private String line;
 
-    public Start(String filePath, String startTaskName, String ymd, String hms)  {
+    public Start(String filePath, String startTaskName, String ymd, String hms) {
         this.filePath = filePath;
         this.startTaskName = startTaskName;
         this.ymd = ymd;
         this.hms = hms;
     }
 
-    // csvファイル内に指定したタスク名がなければtrue、あればfalseを返す
+    // csvファイル内に指定したタスク名がなければtrue、あればfalseを返すメソッド
     public boolean isTaskNameValid() {
         Set<String> taskNames = new HashSet<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {

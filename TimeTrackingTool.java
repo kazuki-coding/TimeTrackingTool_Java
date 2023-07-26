@@ -27,7 +27,7 @@ public class TimeTrackingTool {
                 // -sの場合
                 case "-s":
 
-                    // タスク名を指定してインタンス化
+                    // タスク名を指定してスタートクラスをインタンス化
                     String startTaskName = getTaskName();
                     Start s = new Start(filePath, startTaskName, ymd, hms);
 
