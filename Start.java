@@ -21,7 +21,7 @@ public class Start {
         this.hms = hms;
     }
 
-    // csvファイル内に指定したタスク名がなければtrue、あればfalseを返すメソッド
+    // csvファイル内に指定したタスク名がなければtrue、あればfalseを返す
     public boolean isTaskNameValid() {
         Set<String> taskNames = new HashSet<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -45,7 +45,7 @@ public class Start {
         }
     }
 
-    // 開始時間を記録するメソッド
+    // 開始時間を記録する
     public void writeStartTime() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath))) {
             bw.write("Task Name,Date,Started Time,Finished Time,Working Time(min),Working Time(sec)");
