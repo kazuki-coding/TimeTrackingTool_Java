@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class TimeTrackingTool {
     public static void main(String[] args) {
-        final String SAMPLE_PATH = "C://Java//Sample.csv"; // csvファイルを指定
+        String filePath = "C://Java//Sample.csv"; // csvファイルを指定
 
         // -s,-f,-vt,vwのいずれかを受け取る
         Scanner scanner = new Scanner(System.in);
@@ -14,7 +14,7 @@ public class TimeTrackingTool {
         String cmd = scanner.next();
 
         // 各コマンドごとの処理
-        try (FileWriter fw = new FileWriter(SAMPLE_PATH, true)) {
+        try (FileWriter fw = new FileWriter(filePath, true)) {
 
             // 日時のフォーマットを指定
             Date date = new Date();
@@ -27,15 +27,17 @@ public class TimeTrackingTool {
                 // -sの場合
                 case "-s":
 
-                    // タスク名を指定
+                    // タスク名を指定してインタンス化
                     String startTaskName = getTaskName();
+                    Start s = new Start(filePath, startTaskName, ymd, hms);
 
-                    // タスク名が適切か判断する
-                    CSVRead.checkStartTaskNameIsUsable(SAMPLE_PATH, startTaskName);
-
-                    // タスク名と開始時間を記録
-                    CSVWrite.writeStartTime(SAMPLE_PATH, startTaskName, ymd, hms);
-                    System.out.println("タスク『" + startTaskName + "』の開始時間を記録しました");
+                    // タスク名が適切か判断してタスク名と開始時間を記録
+                    if (s.isTaskNameValid()) {
+                        s.writeStartTime();
+                        System.out.println("タスク『" + startTaskName + "』の開始時間を記録しました");
+                    } else {
+                        System.out.println("そのタスクは開始を宣言済みです");
+                    }
                     break;
 
                 // -fの場合
@@ -45,14 +47,14 @@ public class TimeTrackingTool {
                     String finishTaskName = getTaskName();
 
                     // タスク名が適切か判断する
-                    CSVRead.checkFinishTaskNameIsUsable(SAMPLE_PATH, finishTaskName);
+                    CSVRead.checkFinishTaskNameIsUsable(filePath, finishTaskName);
 
                     // タスクの終了時間を記録
-                    CSVWrite.writeFinishTime(SAMPLE_PATH, finishTaskName, hms);
+                    CSVWrite.writeFinishTime(filePath, finishTaskName, hms);
                     System.out.println("タスク『" + finishTaskName + "』の終了時間を記録しました");
 
                     // タスクの作業時間を算出
-                    CSVWrite.writeWorkingTime(SAMPLE_PATH, finishTaskName);
+                    CSVWrite.writeWorkingTime(filePath, finishTaskName);
                     break;
 
                 // -vtの場合
@@ -60,12 +62,12 @@ public class TimeTrackingTool {
 
                     // 本日のタスク名と作業時間を読み取る(すべて)
                     System.out.println("『本日のタスクと作業時間』");
-                    CSVRead.getTodayWorkingTime(SAMPLE_PATH, ymd);
+                    CSVRead.getTodayWorkingTime(filePath, ymd);
                     break;
 
                 // -vwの場合
                 case "-vw":
-                    CSVRead.getWeekWorkingTime(SAMPLE_PATH, ymd);
+                    CSVRead.getWeekWorkingTime(filePath, ymd);
                     break;
 
                 // どれでもない場合
