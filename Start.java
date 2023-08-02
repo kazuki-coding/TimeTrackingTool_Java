@@ -24,9 +24,9 @@ public class Start {
     // csvファイル内に指定したタスク名がなければtrue、あればfalseを返す
     public boolean isTaskNameValid() {
         Set<String> taskNames = new HashSet<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
             while ((this.line = br.readLine()) != null) {
-                String[] cells = line.split(",");
+                String[] cells = this.line.split(",");
                 if (cells.length > 0) {
                     taskNames.add(cells[0]);
                 }
@@ -47,7 +47,7 @@ public class Start {
 
     // 開始時間を記録する
     public void writeStartTime() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath, true))) {
             bw.write("Task Name,Date,Started Time,Finished Time,Working Time(min),Working Time(sec)");
             bw.newLine();
             bw.write(this.startTaskName + "," + this.ymd + "," + this.hms + "," + "-----" + "," + "-----" + ","

@@ -43,18 +43,19 @@ public class TimeTrackingTool {
                 // -fの場合
                 case "-f":
 
-                    // タスク名を指定
+                    // タスク名を指定してインスタンス化
                     String finishTaskName = getTaskName();
+                    Finish f = new Finish(filePath, finishTaskName, hms);
 
-                    // タスク名が適切か判断する
-                    CSVRead.checkFinishTaskNameIsUsable(filePath, finishTaskName);
-
-                    // タスクの終了時間を記録
-                    CSVWrite.writeFinishTime(filePath, finishTaskName, hms);
-                    System.out.println("タスク『" + finishTaskName + "』の終了時間を記録しました");
-
-                    // タスクの作業時間を算出
-                    CSVWrite.writeWorkingTime(filePath, finishTaskName);
+                    // タスク名が適切か判断して終了時間と作業時間を記録
+                    if (f.isTaskNameValid()) {
+                        f.writeFinishTime();
+                        System.out.println("タスク『" + finishTaskName + "』の終了時間を記録しました");
+                        CSVWrite.writeWorkingTime(filePath, finishTaskName);
+                        System.out.println("タスク『" + finishTaskName + "』の作業時間を記録しました");
+                    } else {
+                        System.out.println("そのタスクは開始を宣言してません");
+                    }
                     break;
 
                 // -vtの場合
