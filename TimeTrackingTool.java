@@ -50,9 +50,8 @@ public class TimeTrackingTool {
                     // タスク名が適切か判断して終了時間と作業時間を記録
                     if (f.isTaskNameValid()) {
                         f.writeFinishTime();
-                        System.out.println("タスク『" + finishTaskName + "』の終了時間を記録しました");
-                        CSVWrite.writeWorkingTime(filePath, finishTaskName);
-                        System.out.println("タスク『" + finishTaskName + "』の作業時間を記録しました");
+                        f.writeWorkingTime();
+                        System.out.println("タスク『" + finishTaskName + "』の終了時間と作業時間を記録しました");
                     } else {
                         System.out.println("そのタスクは開始を宣言してません");
                     }
