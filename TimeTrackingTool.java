@@ -61,8 +61,8 @@ public class TimeTrackingTool {
                 case "-vt":
 
                     // 本日のタスク名と作業時間を読み取る(すべて)
-                    System.out.println("『本日のタスクと作業時間』");
-                    CSVRead.getTodayWorkingTime(filePath, ymd);
+                    ViewToday vt = new ViewToday(filePath, ymd);
+                    vt.getTodayWorkingTime();
                     break;
 
                 // -vwの場合
