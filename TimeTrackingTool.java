@@ -24,55 +24,36 @@ public class TimeTrackingTool {
             String hms = hourMinuteSecond.format(date);
 
             switch (cmd) {
-                // -sの場合
+                // タスク名が適切か判断してタスク名と開始時間を記録する
                 case "-s":
-
-                    // タスク名を指定してインタンス化
                     String startTaskName = getTaskName();
                     Start s = new Start(filePath, startTaskName, ymd, hms);
-
-                    // タスク名が適切か判断してタスク名と開始時間を記録
-                    if (s.isTaskNameValid()) {
-                        s.writeStartTime();
-                        System.out.println("タスク『" + startTaskName + "』の開始時間を記録しました");
-                    } else {
-                        System.out.println("そのタスクは開始を宣言済みです");
-                    }
+                    s.writeStartTime();
                     break;
 
-                // -fの場合
+                // タスク名が適切か判断して終了時間と作業時間を記録する
                 case "-f":
-
-                    // タスク名を指定してインスタンス化
                     String finishTaskName = getTaskName();
                     Finish f = new Finish(filePath, finishTaskName, hms);
-
-                    // タスク名が適切か判断して終了時間と作業時間を記録
-                    if (f.isTaskNameValid()) {
-                        f.writeFinishTime();
-                        f.writeWorkingTime();
-                        System.out.println("タスク『" + finishTaskName + "』の終了時間と作業時間を記録しました");
-                    } else {
-                        System.out.println("そのタスクは開始を宣言してません");
-                    }
+                    f.writeFinishTime();
+                    f.writeWorkingTime();
                     break;
 
-                // -vtの場合
+                // 本日のタスク名と作業時間を表示する
                 case "-vt":
-
-                    // 本日のタスク名と作業時間を読み取る(すべて)
                     ViewToday vt = new ViewToday(filePath, ymd);
-                    vt.getTodayWorkingTime();
+                    vt.indicateTodayWorkingTime();
                     break;
 
-                // -vwの場合
+                // 直近7日間の作業時間を表示する
                 case "-vw":
-                    CSVRead.getWeekWorkingTime(filePath, ymd);
+                    ViewWeek vw = new ViewWeek(filePath, ymd);
+                    vw.indicateWorkingTimeEachDay();
                     break;
 
                 // どれでもない場合
                 default:
-
+                    System.out.println("-s,-f,-vt,-vwのどれかを指定してください");
                     break;
             }
             scanner.close();

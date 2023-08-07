@@ -23,7 +23,7 @@ public class Finish {
     }
 
     // csvファイル内に指定したタスク名があればtrue、なければfalseを返す
-    public boolean isTaskNameValid() {
+    public boolean isFinishTaskNameValid() {
         Set<String> taskNames = new HashSet<>();
         try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
             while ((this.line = br.readLine()) != null) {
@@ -48,30 +48,35 @@ public class Finish {
 
     // 終了時間を記録する
     public void writeFinishTime() {
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
-            while ((this.line = br.readLine()) != null) {
-                String[] cells = this.line.split(",");
-                if (this.finishTaskName.equals(cells[0])) {
-                    cells[3] = this.hms;
+        if (isFinishTaskNameValid()) {
+            StringBuilder sb = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
+                while ((this.line = br.readLine()) != null) {
+                    String[] cells = this.line.split(",");
+                    if (this.finishTaskName.equals(cells[0])) {
+                        cells[3] = this.hms;
+                    }
+                    sb.append(String.join(",", cells)).append("\n");
                 }
-                sb.append(String.join(",", cells)).append("\n");
+            } catch (FileNotFoundException e) {
+                System.out.println("指定されたファイルが見つかりませんでした");
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("ファイル読み込み時にエラーが発生しました");
+                e.printStackTrace();
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("指定されたファイルが見つかりませんでした");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("ファイル読み込み時にエラーが発生しました");
-            e.printStackTrace();
-        }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath))) {
-            bw.write(sb.toString());
-        } catch (FileNotFoundException e) {
-            System.out.println("指定されたファイルが見つかりませんでした");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("ファイル書き込み時にエラーが発生しました");
-            e.printStackTrace();
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath))) {
+                bw.write(sb.toString());
+                System.out.println("タスク『" + finishTaskName + "』の終了時間を記録しました");
+            } catch (FileNotFoundException e) {
+                System.out.println("指定されたファイルが見つかりませんでした");
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("ファイル書き込み時にエラーが発生しました");
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("そのタスクは開始を宣言してません");
         }
     }
 
@@ -101,6 +106,7 @@ public class Finish {
         }
         try (BufferedWriter br = new BufferedWriter(new FileWriter(this.filePath))) {
             br.write(sb.toString());
+            System.out.println("タスク『" + finishTaskName + "』の作業時間を記録しました");
         } catch (FileNotFoundException e) {
             System.out.println("指定されたファイルが見つかりませんでした");
             e.printStackTrace();

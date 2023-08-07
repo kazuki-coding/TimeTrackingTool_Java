@@ -12,14 +12,14 @@ public class ViewToday {
         this.ymd = ymd;
     }
 
-    public void getTodayWorkingTime() {
+    public void indicateTodayWorkingTime() {
         String line;
         int sumOfMinutes = 0;
         int sumOfSeconds = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
             while ((line = br.readLine()) != null) {
                 String[] cells = line.split(",");
-                if ((cells.length > 1) && (this.ymd.equals(cells[1]))) {
+                if (cells.length > 1 && this.ymd.equals(cells[1])) {
                     System.out.println("タスク:" + cells[0] + "   作業時間：" + cells[4] + "分" + cells[5] + "秒");
                     sumOfMinutes += Integer.parseInt(cells[4]);
                     sumOfSeconds += Integer.parseInt(cells[5]);

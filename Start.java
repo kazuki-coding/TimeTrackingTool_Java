@@ -22,7 +22,7 @@ public class Start {
     }
 
     // csvファイル内に指定したタスク名がなければtrue、あればfalseを返す
-    public boolean isTaskNameValid() {
+    public boolean isStartTaskNameValid() {
         Set<String> taskNames = new HashSet<>();
         try (BufferedReader br = new BufferedReader(new FileReader(this.filePath))) {
             while ((this.line = br.readLine()) != null) {
@@ -47,19 +47,23 @@ public class Start {
 
     // 開始時間を記録する
     public void writeStartTime() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath, true))) {
-            bw.write("Task Name,Date,Started Time,Finished Time,Working Time(min),Working Time(sec)");
-            bw.newLine();
-            bw.write(this.startTaskName + "," + this.ymd + "," + this.hms + "," + "-----" + "," + "-----" + ","
-                    + "-----");
-            bw.newLine();
-            bw.newLine();
-        } catch (FileNotFoundException e) {
-            System.out.println("指定されたファイルが見つかりませんでした");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("ファイル書き込み時にエラーが発生しました");
-            e.printStackTrace();
+        if (isStartTaskNameValid()) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.filePath, true))) {
+                bw.write("Task Name,Date,Started Time,Finished Time,Working Time(min),Working Time(sec)");
+                bw.newLine();
+                bw.write(this.startTaskName + "," + this.ymd + "," + this.hms + "," + " " + "," + " " + "," + " ");
+                bw.newLine();
+                bw.newLine();
+                System.out.println("タスク『" + startTaskName + "』の開始時間を記録しました");
+            } catch (FileNotFoundException e) {
+                System.out.println("指定されたファイルが見つかりませんでした");
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("ファイル書き込み時にエラーが発生しました");
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("そのタスクは開始を宣言済みです");
         }
     }
 }
